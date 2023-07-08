@@ -17,6 +17,25 @@ providers:
     email: env/CLOUDFLARE_EMAIL
     token: env/CLOUDFLARE_TOKEN
 
+processors:
+
+  exclude-names:
+    class: octodns.processor.filter.NameRejectlistFilter
+    rejectlist:
+      # exact string match
+      # - www
+      # contains/substring match
+      # - /substring/
+      # regex pattern match
+      # - /some-pattern-\\d\\+/
+      # regex - anchored so has to match start to end
+      # - /^start-.+-end$/
+      - callisto
+
+  # include-names:
+  #   class: octodns.processor.filter.NameAllowlistFilter
+  #   allowlist:
+
 
 
 zones:
@@ -24,6 +43,8 @@ zones:
   grumpydude.com.:
     sources:
       - zones
+    processors:
+      - exclude-names
     targets:
       - cloudflare
 
