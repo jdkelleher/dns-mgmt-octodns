@@ -1,0 +1,41 @@
+
+---
+manager:
+  max_workers: 10
+
+providers:
+
+  zones:
+    class: octodns.provider.yaml.YamlProvider
+    directory: ./zones
+    default_ttl: 300
+    enforce_order: true
+
+  cloudflare:
+    # class: octodns.provider.cloudflare.CloudflareProvider
+    class: octodns_cloudflare.CloudflareProvider
+    email: env/CLOUDFLARE_EMAIL
+    token: env/CLOUDFLARE_TOKEN
+
+
+
+zones:
+
+  grumpydude.com.:
+    sources:
+      - zones
+    targets:
+      - cloudflare
+
+  grumpydudette.com.:
+    sources:
+      - zones
+    targets:
+      - cloudflare
+
+  kcrew.net.:
+    sources:
+      - zones
+    targets:
+      - cloudflare
+

@@ -1,0 +1,19 @@
+
+---
+? ''
+: - octodns:
+      cloudflare:
+        proxied: false
+    ttl: 300
+    type: A
+    value: 10.0.0.2
+  - ttl: 300
+    type: MX
+    value:
+      exchange: list-test.grumpydude.com.
+      preference: 0
+  - ttl: 300
+    type: TXT
+    value: v=spf1 a mx ~all
+
+
