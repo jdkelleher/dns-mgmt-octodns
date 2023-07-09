@@ -79,6 +79,11 @@ lists:
     exchange: lists.grumpydude.com.
     preference: 0
 
+test:
+- ttl: 300
+  type: TXT
+  value: v=spf1 a mx ~all
+
 trinity:
   octodns:
     cloudflare:
