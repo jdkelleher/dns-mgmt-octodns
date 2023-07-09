@@ -82,7 +82,7 @@ lists:
 test:
 - ttl: 300
   type: TXT
-  value: v=spf1 a mx ~all
+  value: update 1 to test txt entry
 
 trinity:
   octodns:
