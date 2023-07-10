@@ -11,7 +11,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          refs: main
+          ref: main
 
       - name: Setup python
         uses: actions/setup-python@v4
