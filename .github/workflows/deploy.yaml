@@ -1,22 +1,28 @@
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   deploy:
     name: octoDNS Deploy
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
-
-      - uses: actions/setup-python@master
+      - name: Checkout
+        uses: actions/checkout@v3
         with:
-          python-version: '3.9'
+          refs: main
 
-      - uses: py-actions/py-dependency-install@v2
+      - name: Setup python
+        uses: actions/setup-python@masterv4
+        with:
+          python-version: '3.11'
 
-      - run: octodns-sync --config-file=./config.yaml --doit
+      - name: Install Python dependencies
+        uses: py-actions/py-dependency-install@v4
+
+      - name: Run octoDNS sync
+        run: octodns-sync --config-file=./config.yaml --doit
         env:
           CLOUDFLARE_EMAIL: ${{ secrets.CLOUDFLARE_EMAIL }}
           CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
