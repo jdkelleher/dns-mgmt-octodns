@@ -30,7 +30,9 @@ processors:
       # - /some-pattern-\\d\\+/
       # regex - anchored so has to match start to end
       # - /^start-.+-end$/
-      - callisto
+      #
+      # - callisto
+      - /dynamic-/
 
   # include-names:
   #   class: octodns.processor.filter.NameAllowlistFilter

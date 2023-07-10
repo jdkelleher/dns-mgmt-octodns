@@ -24,16 +24,13 @@
     type: TXT
     value: v=spf1 include:_spf.google.com ~all
 
-# This is a dynamically managed entry that is being excluded via
-# NameRejectlistFilter
-#
-# callisto:
-#   octodns:
-#     cloudflare:
-#       proxied: false
-#   ttl: 300
-#   type: A
-#   value: 70.251.188.184
+callisto:
+  octodns:
+    cloudflare:
+      proxied: false
+  ttl: 300
+  type: CNAME
+  value: dynamic-gwy-sv.grumpydude.com.
 
 cpanel:
   octodns:
@@ -42,6 +39,17 @@ cpanel:
   ttl: 300
   type: A
   value: 192.254.189.20
+
+# This is a dynamically managed entry that is being excluded via
+# NameRejectlistFilter
+#
+# dynamic-gwy-sv:
+#   octodns:
+#     cloudflare:
+#       proxied: false
+#   ttl: 300
+#   type: A
+#   value: 70.251.188.184
 
 list-test:
 - octodns:
@@ -90,7 +98,7 @@ trinity:
       proxied: false
   ttl: 300
   type: CNAME
-  value: callisto.grumpydude.com.
+  value: dynamic-gwy-sv.grumpydude.com.
 
 www:
   octodns:
