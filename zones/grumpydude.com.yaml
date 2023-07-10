@@ -82,7 +82,7 @@ lists:
 test:
 - ttl: 300
   type: TXT
-  value: update 1 to test txt entry
+  value: update 2 to test txt entry
 
 trinity:
   octodns:
