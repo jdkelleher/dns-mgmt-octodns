@@ -14,7 +14,7 @@ jobs:
           refs: main
 
       - name: Setup python
-        uses: actions/setup-python@masterv4
+        uses: actions/setup-python@v4
         with:
           python-version: '3.11'
 
