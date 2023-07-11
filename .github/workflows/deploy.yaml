@@ -27,27 +27,8 @@ jobs:
       - name: Install dependencies
         run: make venv
 
-      - name: Run octoDNS with doit flag
+      - name: Run octodns-sync with doit flag
         run: make doit
         env:
           CLOUDFLARE_EMAIL: ${{ secrets.CLOUDFLARE_EMAIL }}
           CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
-
-      #     - name: Checkout
-      #   uses: actions/checkout@v3
-      #   with:
-      #     ref: main
-
-      # - name: Setup python
-      #   uses: actions/setup-python@v4
-      #   with:
-      #     python-version: '3.11'
-
-      # - name: Install Python dependencies
-      #   uses: py-actions/py-dependency-install@v4
-
-      # - name: Run octoDNS sync
-      #   run: octodns-sync --config-file=./config.yaml --doit
-      #   env:
-      #     CLOUDFLARE_EMAIL: ${{ secrets.CLOUDFLARE_EMAIL }}
-      #     CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
