@@ -9,7 +9,7 @@ OctoDNS is written in Python and make is used to manage the virtual environment,
 
 ## Dependencies
 - [Python](https://www.python.org/)
-- [make](https://en.wikipedia.org/wiki/Make_(software)
+- [make](https://en.wikipedia.org/wiki/Make_(software))
 - [OctoDNS](https://github.com/octodns/octodns)
 - [Makefile.env](https://github.com/sio/Makefile.venv)
 
