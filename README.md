@@ -8,9 +8,9 @@ OctoDNS is written in Python and make is used to manage the virtual environment,
 
 
 ## Dependencies
+- [OctoDNS](https://github.com/octodns/octodns)
 - [Python](https://www.python.org/)
 - [make](https://en.wikipedia.org/wiki/Make_(software))
-- [OctoDNS](https://github.com/octodns/octodns)
 - [Makefile.env](https://github.com/sio/Makefile.venv)
 
 
@@ -22,18 +22,39 @@ stuff ...
 
 ### Grab the repo
 
-stuff ...
+That's easy, just clone it.
+
+```shell
+$ git clone https://github.com/jdkelleher/dns-mgmt-octodns.git
+$ cd dns-mgmt-octodns
+```
 
 
 ### Install dependencies in virtual environment
 
-stuff ...
+The file `requirements.txt` contains all the Python modules needed to install OctoDNS for a given configuration. The YAML provider is built-in, but the other [providers](https://github.com/octodns/octodns#providers) are maintained in their own repositories and released as independent modules.
 
+```shell
+octodns==0.9.21
+octodns-cloudflare==0.0.2
+```
+
+To (re)install OctoDNS modules and all dependencies, simply run
+
+```shell
+$ make clean-venv
+$ make venv
+```
 
 ### Secrets / Tokens
 
 stuff ...
 
+```shell
+# Add these as Repository secrets to enable GitHub actions
+export CLOUDFLARE_EMAIL="ENTER EMAIL"
+export CLOUDFLARE_TOKEN="ENTER TOKEN"
+```
 
 ### Config
 
@@ -42,22 +63,39 @@ stuff ...
 
 ### Validate
 
-stuff ...
+To validate the `config.yaml` and any zone changes, simply run
 
+```shell
+$ make validate
+```
 
 ### Sync (Dry Run)
 
 stuff ...
+
+```shell
+$ make sync
+```
 
 
 ### Do It
 
 stuff ...
 
+```shell
+$ make sync
+```
+
+In some cases, there might be too many records changing. octoDNS has built-in protection to make sure you can’t delete your entire zone, or add too many records in a single go unless you explicitly tell it you know what you are doing. In this case, you need to provide the `--force` option.
+
+```shell
+$ make force
+```
+
 
 Contributing
 
-stuff ...
+Would be greatly appreciate ...
 
 
 ## License and copyright
