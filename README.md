@@ -35,8 +35,10 @@ $ cd dns-mgmt-octodns
 The file `requirements.txt` contains all the Python modules needed to install OctoDNS for a given configuration. The YAML provider is built-in, but the other [providers](https://github.com/octodns/octodns#providers) are maintained in their own repositories and released as independent modules.
 
 ```shell
+$ cat requirements.txt
 octodns==0.9.21
 octodns-cloudflare==0.0.2
+$
 ```
 
 To (re)install OctoDNS modules and all dependencies, simply run
@@ -50,16 +52,85 @@ $ make venv
 
 stuff ...
 
+
 ```shell
+$ cat .env
 # Add these as Repository secrets to enable GitHub actions
 export CLOUDFLARE_EMAIL="ENTER EMAIL"
 export CLOUDFLARE_TOKEN="ENTER TOKEN"
+$
 ```
 
 ### Config
 
 stuff ...
 
+`config.yaml`
+```yaml
+---
+manager:
+  max_workers: 10
+
+providers:
+  zones:
+    class: octodns.provider.yaml.YamlProvider
+    directory: ./zones
+    default_ttl: 300
+    enforce_order: true
+  cloudflare:
+    class: octodns_cloudflare.CloudflareProvider
+    email: env/CLOUDFLARE_EMAIL
+    token: env/CLOUDFLARE_TOKEN
+
+zones:
+  example.com.:
+    sources:
+      - zones
+    targets:
+      - cloudflare
+```
+
+`zones/example.com.yaml`
+```yaml
+---
+? ''
+: - octodns:
+      cloudflare:
+        proxied: false
+    ttl: 300
+    type: A
+    value: 10.0.0.10
+  - ttl: 300
+    type: MX
+    values:
+    - exchange: mx1.example.com.
+      preference: 1
+  - ttl: 300
+    type: TXT
+    value: v=spf1 a mx ~all
+
+mx1:
+  octodns:
+    cloudflare:
+      proxied: false
+  ttl: 300
+  type: A
+  value: 10.0.0.5
+
+test:
+- ttl: 300
+  type: TXT
+  value: just a test txt entry
+
+www:
+  octodns:
+    cloudflare:
+      proxied: false
+  ttl: 300
+  type: A
+  value: 10.0.0.10
+
+```
 
 ### Validate
 
@@ -83,17 +154,17 @@ $ make sync
 stuff ...
 
 ```shell
-$ make sync
+$ make doit
 ```
 
-In some cases, there might be too many records changing. octoDNS has built-in protection to make sure you can’t delete your entire zone, or add too many records in a single go unless you explicitly tell it you know what you are doing. In this case, you need to provide the `--force` option.
+OctoDNS has built-in protection to make too many records are not added/deleted/updated in a single go. If you are sure the changes are valid, the checks can be bypassed with the `--force` option.
 
 ```shell
 $ make force
 ```
 
 
-Contributing
+## Contributing
 
 Would be greatly appreciate ...
 
