@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 
 # Very rudimentary helper script to pull all zones from an OctoDNS config
-# file
-# and run octodns-dump to generate zone files.
+# file and run octodns-dump to generate zone files.
 #
 # This script IS NOT SMART.
 #
