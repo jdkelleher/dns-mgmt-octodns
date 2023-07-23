@@ -14,11 +14,6 @@ OctoDNS is written in Python and make is used to manage the virtual environment,
 - [Makefile.env](https://github.com/sio/Makefile.venv)
 
 
-## Getting Started
-
-stuff ...
-
-
 ### Grab the repo
 
 That's easy, just clone it.
@@ -31,7 +26,7 @@ $ cd dns-mgmt-octodns
 
 ### Install dependencies in virtual environment
 
-The file `requirements.txt` contains all the Python modules needed to install OctoDNS for a given configuration. The YAML provider is built-in, but the other [providers](https://github.com/octodns/octodns#providers) are maintained in their own repositories and released as independent modules.
+The file `requirements.txt` contains all the Python modules needed to install OctoDNS for a given configuration. The YAML provider is built-in, but the other [providers](https://github.com/octodns/octodns#providers) are maintained in their own repositories and released as independent modules. Update or exclude version numbers as appropriate.
 
 ```shell
 $ cat requirements.txt
@@ -40,32 +35,39 @@ octodns-cloudflare==0.0.2
 $
 ```
 
-To (re)install OctoDNS modules and all dependencies, simply run
+At this point, both `make` and `python3` must be installed and in the PATH. To (re)install OctoDNS modules and all dependencies, simply run
 
 ```shell
 $ make clean-venv
 $ make venv
 ```
 
-### Secrets / Tokens
 
-The file `./.env` will be sourced for environment variables if it exists. Be careful as this is sourced by make, not a shell, so make syntax must be used, e.g. make does not part single or double quotes so values with spaces are a no-go. This should also not be excluded from the repo via `.gitignore` to prevent secrets being leaked.
+### Configuration
+
+Customize the [`config.yaml`](config.yaml) file provided as needed. The OctoDNS repo has a plenty of [config documentation](https://github.com/octodns/octodns#config). There are also numerous webpages which explain the configuration process and options. It would be silly to replicate either here. 
+
+
+### Credentials / Tokens / Keys (aka Secret Stuff)
+
+Credentials for all of the OctoDNS [providers](https://github.com/octodns/octodns#providers) can be supplied via environment variables. This is very convenient for CI/CD piplines.
+
+The file `.env` will be included for environment variables if it exists (no errors will be generated if it does not) Be careful as this is done via a `-include $(WORKDIR)/.env` statement parsed by `make`, it is not sourced a shell. `make` syntax must be used which does not parse single or double quotes, so values with spaces are not supported. This file should also be excluded from the repo via `.gitignore` to prevent secrets being leaked.
 
 Example contents:
 
 ```shell
 $ cat .env
-# Add these as Repository secrets to enable GitHub actions
+# Add these as Repository secrets to enable GitHub Actions
 export CLOUDFLARE_EMAIL=user@example.com
-export CLOUDFLARE_TOKEN=aBunchOfNumbers
+export CLOUDFLARE_TOKEN=aBunchOfNumbersAndLetters
 $
 ```
 
-### Configuration
 
-The OctoDNS repo has a plenty of [config documentation](https://github.com/octodns/octodns#config). There are also numerous webpages which explain the configuration process and options. It would be silly to replicate either here. 
+### Zone Files
 
-There is a here that can be used to pull down zones from a provider into local files. It's a not very smart wrapper around `octodns-dump` that will parse a config and try to do the right thing. Use with caution for the initial zone file population.
+There is a script included that can be used to pull down zones from a provider into local files. It's a not very smart wrapper around `octodns-dump` that will parse a config and try to do the right thing. Use with caution for the initial zone file population.
 
 ```shell
 $ make shell
@@ -125,7 +127,7 @@ grumpydude.com.yaml	grumpydudette.com.yaml	kcrew.net.yaml
 
 ### Validate
 
-To validate the `config.yaml` and any zone changes, simply run
+To validate the `config.yaml` file and any referenced local zone files, simply run
 
 ```shell
 $ make validate
@@ -183,7 +185,7 @@ $ make sync
 
 $
 ```
-Here you can see that `make sync` runs `make validate` as a dependency and an update is planned to a TXT record I created for testing.
+Here you can see that `make sync` runs `make validate` as a dependency and an update is planned to a TXT record created for testing.
 
 
 ### Do It
@@ -237,7 +239,7 @@ $ make doit
 $
 ```
 
-Here you can see that `make doit` also runs `make validate` as a dependency as we can't be too careful. The update plan that was shown by `make sync` has been executed and change can be validated with `dig` like so
+Here you can see that `make doit` also runs `make validate` as a dependency as caution is best. The update plan that was shown by `make sync` has been executed and change can be validated with `dig` like so
 
 ```shell
 $ dig -t txt test.grumpydude.com
@@ -268,12 +270,14 @@ OctoDNS has built-in protection to make too many records are not added/deleted/u
 
 ### CI/CD
 
-stuff ... GitHub Actions
+There are many options to run OctoDNS as part of a CI/CD pipeline. This repo includes a workflow, [`deploy.yaml`](.github/workflows/deploy.yaml) for an action to run on a push or pull request to main. It will deploy and configure a docker container to execute `make doit`. All runs of this workflow can be found [here](https://github.com/jdkelleher/dns-mgmt-octodns/actions/workflows/deploy.yaml). 
+
+GitHub Actions documentation may be found [here](https://docs.github.com/en/actions).
 
 
 ## Contributing
 
-Would be greatly appreciate ...
+Would be greatly appreciate. Please open [Issues](https://github.com/jdkelleher/dns-mgmt-octodns/issues) and/or submit [Pull requests](https://github.com/jdkelleher/dns-mgmt-octodns/pulls).
 
 
 ## License and copyright
