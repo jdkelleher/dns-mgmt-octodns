@@ -12,7 +12,7 @@
 
 # $(WORKDIR)/.env will be sourced for environment variables if it exists. Be careful
 # as this is sourced by make, not a shell, so make syntax must be used, e.g. make
-# does not part single or double quotes so values with spaces are a no-go
+# does not part single or double quotes so values with spaces are a no-go.
 #
 # Example contents:
 # 	export CLOUDFLARE_EMAIL=user@example.com
