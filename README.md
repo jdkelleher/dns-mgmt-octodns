@@ -7,6 +7,21 @@ This repo is configured to automatically push sync zone changes to DNS providers
 OctoDNS is written in Python and make is used to manage the virtual environment, dependencies, and zone change actions.
 
 
+- [Manage DNS as code with OctoDNS.](#manage-dns-as-code-with-octodns)
+  - [Dependencies](#dependencies)
+    - [Grab the repo](#grab-the-repo)
+    - [Install dependencies in virtual environment](#install-dependencies-in-virtual-environment)
+    - [Configuration](#configuration)
+    - [Credentials / Tokens / Keys (aka Secret Stuff)](#credentials--tokens--keys-aka-secret-stuff)
+    - [Zone Files](#zone-files)
+    - [Validate](#validate)
+    - [Sync (Dry Run)](#sync-dry-run)
+    - [Do It](#do-it)
+    - [CI/CD](#cicd)
+  - [Contributing](#contributing)
+  - [License and copyright](#license-and-copyright)
+
+
 ## Dependencies
 - [OctoDNS](https://github.com/octodns/octodns)
 - [Python](https://www.python.org/)
