@@ -14,7 +14,6 @@ OctoDNS is written in Python and make is used to manage the virtual environment,
 - [Makefile.env](https://github.com/sio/Makefile.venv)
 
 
-
 ## Getting Started
 
 stuff ...
@@ -50,87 +49,79 @@ $ make venv
 
 ### Secrets / Tokens
 
-stuff ...
+The file `./.env` will be sourced for environment variables if it exists. Be careful as this is sourced by make, not a shell, so make syntax must be used, e.g. make does not part single or double quotes so values with spaces are a no-go. This should also not be excluded from the repo via `.gitignore` to prevent secrets being leaked.
 
+Example contents:
 
 ```shell
 $ cat .env
 # Add these as Repository secrets to enable GitHub actions
-export CLOUDFLARE_EMAIL="ENTER EMAIL"
-export CLOUDFLARE_TOKEN="ENTER TOKEN"
+export CLOUDFLARE_EMAIL=user@example.com
+export CLOUDFLARE_TOKEN=aBunchOfNumbers
 $
 ```
 
-### Config
+### Configuration
 
-stuff ...
+The OctoDNS repo has a plenty of [config documentation](https://github.com/octodns/octodns#config). There are also numerous webpages which explain the configuration process and options. It would be silly to replicate either here. 
 
-`config.yaml`
-```yaml
----
-manager:
-  max_workers: 10
+There is a here that can be used to pull down zones from a provider into local files. It's a not very smart wrapper around `octodns-dump` that will parse a config and try to do the right thing. Use with caution for the initial zone file population.
 
-providers:
-  zones:
-    class: octodns.provider.yaml.YamlProvider
-    directory: ./zones
-    default_ttl: 300
-    enforce_order: true
-  cloudflare:
-    class: octodns_cloudflare.CloudflareProvider
-    email: env/CLOUDFLARE_EMAIL
-    token: env/CLOUDFLARE_TOKEN
-
-zones:
-  example.com.:
-    sources:
-      - zones
-    targets:
-      - cloudflare
+```shell
+$ make shell
+. ./.venv/bin/activate && exec sh
+(.venv) ./scripts/dump-zones.py --config-file ./config.yaml 
+Running command: octodns-dump --config-file ./config.yaml --output-dir=./zones/ grumpydude.com. cloudflare
+2023-07-22T19:38:22  [140704284960320] INFO  Manager __init__: config_file=./config.yaml (octoDNS 0.9.21)
+2023-07-22T19:38:22  [140704284960320] INFO  Manager _config_executor: max_workers=10
+2023-07-22T19:38:22  [140704284960320] INFO  Manager _config_include_meta: include_meta=False
+2023-07-22T19:38:22  [140704284960320] INFO  Manager __init__: global_processors=[]
+2023-07-22T19:38:22  [140704284960320] INFO  Manager __init__: provider=zones (octodns.provider.yaml 0.9.21)
+2023-07-22T19:38:22  [140704284960320] INFO  Manager __init__: provider=cloudflare (octodns_cloudflare 0.0.2)
+2023-07-22T19:38:22  [140704284960320] INFO  Manager __init__: processor=exclude-names (octodns.processor.filter 0.9.21)
+2023-07-22T19:38:22  [140704284960320] INFO  Manager dump: zone=grumpydude.com., output_dir=./zones/, output_provider=None, lenient=False, split=False, sources=['cloudflare']
+2023-07-22T19:38:22  [140704284960320] INFO  Manager dump: using custom YamlProvider
+2023-07-22T19:38:23  [140704284960320] INFO  CloudflareProvider[cloudflare] populate:   found 14 records, exists=True
+2023-07-22T19:38:23  [140704284960320] INFO  YamlProvider[dump] plan: desired=grumpydude.com.
+2023-07-22T19:38:23  [140704284960320] WARNING YamlProvider[dump] root NS record supported, but no record is configured for grumpydude.com.
+2023-07-22T19:38:23  [140704284960320] INFO  YamlProvider[dump] plan:   Creates=14, Updates=0, Deletes=0, Existing Records=0
+2023-07-22T19:38:23  [140704284960320] INFO  YamlProvider[dump] apply: making 14 changes to grumpydude.com.
+Running command: octodns-dump --config-file ./config.yaml --output-dir=./zones/ grumpydudette.com. cloudflare
+2023-07-22T19:38:23  [140704284960320] INFO  Manager __init__: config_file=./config.yaml (octoDNS 0.9.21)
+2023-07-22T19:38:23  [140704284960320] INFO  Manager _config_executor: max_workers=10
+2023-07-22T19:38:23  [140704284960320] INFO  Manager _config_include_meta: include_meta=False
+2023-07-22T19:38:23  [140704284960320] INFO  Manager __init__: global_processors=[]
+2023-07-22T19:38:23  [140704284960320] INFO  Manager __init__: provider=zones (octodns.provider.yaml 0.9.21)
+2023-07-22T19:38:23  [140704284960320] INFO  Manager __init__: provider=cloudflare (octodns_cloudflare 0.0.2)
+2023-07-22T19:38:23  [140704284960320] INFO  Manager __init__: processor=exclude-names (octodns.processor.filter 0.9.21)
+2023-07-22T19:38:23  [140704284960320] INFO  Manager dump: zone=grumpydudette.com., output_dir=./zones/, output_provider=None, lenient=False, split=False, sources=['cloudflare']
+2023-07-22T19:38:23  [140704284960320] INFO  Manager dump: using custom YamlProvider
+2023-07-22T19:38:24  [140704284960320] INFO  CloudflareProvider[cloudflare] populate:   found 3 records, exists=True
+2023-07-22T19:38:24  [140704284960320] INFO  YamlProvider[dump] plan: desired=grumpydudette.com.
+2023-07-22T19:38:24  [140704284960320] WARNING YamlProvider[dump] root NS record supported, but no record is configured for grumpydudette.com.
+2023-07-22T19:38:24  [140704284960320] INFO  YamlProvider[dump] plan:   Creates=3, Updates=0, Deletes=0, Existing Records=0
+2023-07-22T19:38:24  [140704284960320] INFO  YamlProvider[dump] apply: making 3 changes to grumpydudette.com.
+Running command: octodns-dump --config-file ./config.yaml --output-dir=./zones/ kcrew.net. cloudflare
+2023-07-22T19:38:24  [140704284960320] INFO  Manager __init__: config_file=./config.yaml (octoDNS 0.9.21)
+2023-07-22T19:38:24  [140704284960320] INFO  Manager _config_executor: max_workers=10
+2023-07-22T19:38:24  [140704284960320] INFO  Manager _config_include_meta: include_meta=False
+2023-07-22T19:38:24  [140704284960320] INFO  Manager __init__: global_processors=[]
+2023-07-22T19:38:24  [140704284960320] INFO  Manager __init__: provider=zones (octodns.provider.yaml 0.9.21)
+2023-07-22T19:38:24  [140704284960320] INFO  Manager __init__: provider=cloudflare (octodns_cloudflare 0.0.2)
+2023-07-22T19:38:24  [140704284960320] INFO  Manager __init__: processor=exclude-names (octodns.processor.filter 0.9.21)
+2023-07-22T19:38:24  [140704284960320] INFO  Manager dump: zone=kcrew.net., output_dir=./zones/, output_provider=None, lenient=False, split=False, sources=['cloudflare']
+2023-07-22T19:38:24  [140704284960320] INFO  Manager dump: using custom YamlProvider
+2023-07-22T19:38:25  [140704284960320] INFO  CloudflareProvider[cloudflare] populate:   found 3 records, exists=True
+2023-07-22T19:38:25  [140704284960320] INFO  YamlProvider[dump] plan: desired=kcrew.net.
+2023-07-22T19:38:25  [140704284960320] WARNING YamlProvider[dump] root NS record supported, but no record is configured for kcrew.net.
+2023-07-22T19:38:25  [140704284960320] INFO  YamlProvider[dump] plan:   Creates=3, Updates=0, Deletes=0, Existing Records=0
+2023-07-22T19:38:25  [140704284960320] INFO  YamlProvider[dump] apply: making 3 changes to kcrew.net.
+(.venv) 
+(.venv) ls zones
+grumpydude.com.yaml	grumpydudette.com.yaml	kcrew.net.yaml
+(.venv)
 ```
 
-`zones/example.com.yaml`
-```yaml
----
-? ''
-: - octodns:
-      cloudflare:
-        proxied: false
-    ttl: 300
-    type: A
-    value: 10.0.0.10
-  - ttl: 300
-    type: MX
-    values:
-    - exchange: mx1.example.com.
-      preference: 1
-  - ttl: 300
-    type: TXT
-    value: v=spf1 a mx ~all
-
-mx1:
-  octodns:
-    cloudflare:
-      proxied: false
-  ttl: 300
-  type: A
-  value: 10.0.0.5
-
-test:
-- ttl: 300
-  type: TXT
-  value: just a test txt entry
-
-www:
-  octodns:
-    cloudflare:
-      proxied: false
-  ttl: 300
-  type: A
-  value: 10.0.0.10
-
-```
 
 ### Validate
 
@@ -138,15 +129,61 @@ To validate the `config.yaml` and any zone changes, simply run
 
 ```shell
 $ make validate
+./.venv/bin/octodns-validate --config-file config.yaml
+$
 ```
+No errors, so everything is good.
+
 
 ### Sync (Dry Run)
 
-stuff ...
+To have OctoDNS report on all actions which need to be taken to sync any zone updates with the configured providers, simply run 
 
 ```shell
 $ make sync
+./.venv/bin/octodns-validate --config-file config.yaml
+./.venv/bin/octodns-sync --config-file config.yaml
+2023-07-22T19:14:40  [140704284960320] INFO  Manager __init__: config_file=config.yaml (octoDNS 0.9.21)
+2023-07-22T19:14:40  [140704284960320] INFO  Manager _config_executor: max_workers=10
+2023-07-22T19:14:40  [140704284960320] INFO  Manager _config_include_meta: include_meta=False
+2023-07-22T19:14:40  [140704284960320] INFO  Manager __init__: global_processors=[]
+2023-07-22T19:14:40  [140704284960320] INFO  Manager __init__: provider=zones (octodns.provider.yaml 0.9.21)
+2023-07-22T19:14:40  [140704284960320] INFO  Manager __init__: provider=cloudflare (octodns_cloudflare 0.0.2)
+2023-07-22T19:14:40  [140704284960320] INFO  Manager __init__: processor=exclude-names (octodns.processor.filter 0.9.21)
+2023-07-22T19:14:40  [140704284960320] INFO  Manager sync: eligible_zones=[], eligible_targets=[], dry_run=True, force=False, plan_output_fh=<stdout>
+2023-07-22T19:14:40  [140704284960320] INFO  Manager sync:   zone=grumpydude.com.
+2023-07-22T19:14:40  [140704284960320] INFO  Manager sync:   sources=['zones'] -> targets=['cloudflare']
+2023-07-22T19:14:40  [140704284960320] INFO  Manager sync:   zone=grumpydudette.com.
+2023-07-22T19:14:40  [140704284960320] INFO  Manager sync:   sources=['zones'] -> targets=['cloudflare']
+2023-07-22T19:14:40  [123145424785408] INFO  YamlProvider[zones] populate:   found 13 records, exists=False
+2023-07-22T19:14:40  [123145424785408] INFO  CloudflareProvider[cloudflare] plan: desired=grumpydude.com.
+2023-07-22T19:14:40  [123145441574912] INFO  YamlProvider[zones] populate:   found 3 records, exists=False
+2023-07-22T19:14:40  [123145441574912] INFO  CloudflareProvider[cloudflare] plan: desired=grumpydudette.com.
+2023-07-22T19:14:40  [140704284960320] INFO  Manager sync:   zone=kcrew.net.
+2023-07-22T19:14:40  [140704284960320] INFO  Manager sync:   sources=['zones'] -> targets=['cloudflare']
+2023-07-22T19:14:40  [123145458364416] INFO  YamlProvider[zones] populate:   found 3 records, exists=False
+2023-07-22T19:14:40  [123145458364416] INFO  CloudflareProvider[cloudflare] plan: desired=kcrew.net.
+2023-07-22T19:14:40  [123145441574912] INFO  CloudflareProvider[cloudflare] populate:   found 3 records, exists=True
+2023-07-22T19:14:40  [123145441574912] INFO  CloudflareProvider[cloudflare] plan:   No changes
+2023-07-22T19:14:40  [123145424785408] INFO  CloudflareProvider[cloudflare] populate:   found 14 records, exists=True
+2023-07-22T19:14:40  [123145424785408] INFO  CloudflareProvider[cloudflare] plan:   Creates=0, Updates=1, Deletes=0, Existing Records=13
+2023-07-22T19:14:40  [123145458364416] INFO  CloudflareProvider[cloudflare] populate:   found 3 records, exists=True
+2023-07-22T19:14:40  [123145458364416] INFO  CloudflareProvider[cloudflare] plan:   No changes
+2023-07-22T19:14:40  [140704284960320] INFO  Plan 
+********************************************************************************
+* grumpydude.com.
+********************************************************************************
+* cloudflare (CloudflareProvider)
+*   Update
+*     <TxtRecord TXT 300, test.grumpydude.com., ['update 2 to test txt entry']> ->
+*     <TxtRecord TXT 300, test.grumpydude.com., ['update 3 to test txt entry']> (zones)
+*   Summary: Creates=0, Updates=1, Deletes=0, Existing Records=13
+********************************************************************************
+
+
+$
 ```
+Here you can see that `make sync` runs `make validate` as a dependency and an update is planned to a TXT record I created for testing.
 
 
 ### Do It
@@ -155,13 +192,83 @@ stuff ...
 
 ```shell
 $ make doit
+./.venv/bin/octodns-validate --config-file config.yaml
+./.venv/bin/octodns-sync --config-file config.yaml --doit
+2023-07-22T19:17:51  [140704284960320] INFO  Manager __init__: config_file=config.yaml (octoDNS 0.9.21)
+2023-07-22T19:17:51  [140704284960320] INFO  Manager _config_executor: max_workers=10
+2023-07-22T19:17:51  [140704284960320] INFO  Manager _config_include_meta: include_meta=False
+2023-07-22T19:17:51  [140704284960320] INFO  Manager __init__: global_processors=[]
+2023-07-22T19:17:51  [140704284960320] INFO  Manager __init__: provider=zones (octodns.provider.yaml 0.9.21)
+2023-07-22T19:17:51  [140704284960320] INFO  Manager __init__: provider=cloudflare (octodns_cloudflare 0.0.2)
+2023-07-22T19:17:51  [140704284960320] INFO  Manager __init__: processor=exclude-names (octodns.processor.filter 0.9.21)
+2023-07-22T19:17:51  [140704284960320] INFO  Manager sync: eligible_zones=[], eligible_targets=[], dry_run=False, force=False, plan_output_fh=<stdout>
+2023-07-22T19:17:51  [140704284960320] INFO  Manager sync:   zone=grumpydude.com.
+2023-07-22T19:17:51  [140704284960320] INFO  Manager sync:   sources=['zones'] -> targets=['cloudflare']
+2023-07-22T19:17:51  [140704284960320] INFO  Manager sync:   zone=grumpydudette.com.
+2023-07-22T19:17:51  [140704284960320] INFO  Manager sync:   sources=['zones'] -> targets=['cloudflare']
+2023-07-22T19:17:51  [123145347317760] INFO  YamlProvider[zones] populate:   found 3 records, exists=False
+2023-07-22T19:17:51  [123145347317760] INFO  CloudflareProvider[cloudflare] plan: desired=grumpydudette.com.
+2023-07-22T19:17:51  [123145330528256] INFO  YamlProvider[zones] populate:   found 13 records, exists=False
+2023-07-22T19:17:51  [123145330528256] INFO  CloudflareProvider[cloudflare] plan: desired=grumpydude.com.
+2023-07-22T19:17:51  [140704284960320] INFO  Manager sync:   zone=kcrew.net.
+2023-07-22T19:17:51  [140704284960320] INFO  Manager sync:   sources=['zones'] -> targets=['cloudflare']
+2023-07-22T19:17:51  [123145364107264] INFO  YamlProvider[zones] populate:   found 3 records, exists=False
+2023-07-22T19:17:51  [123145364107264] INFO  CloudflareProvider[cloudflare] plan: desired=kcrew.net.
+2023-07-22T19:17:52  [123145364107264] INFO  CloudflareProvider[cloudflare] populate:   found 3 records, exists=True
+2023-07-22T19:17:52  [123145364107264] INFO  CloudflareProvider[cloudflare] plan:   No changes
+2023-07-22T19:17:52  [123145347317760] INFO  CloudflareProvider[cloudflare] populate:   found 3 records, exists=True
+2023-07-22T19:17:52  [123145347317760] INFO  CloudflareProvider[cloudflare] plan:   No changes
+2023-07-22T19:17:52  [123145330528256] INFO  CloudflareProvider[cloudflare] populate:   found 14 records, exists=True
+2023-07-22T19:17:52  [123145330528256] INFO  CloudflareProvider[cloudflare] plan:   Creates=0, Updates=1, Deletes=0, Existing Records=13
+2023-07-22T19:17:52  [140704284960320] INFO  Plan 
+********************************************************************************
+* grumpydude.com.
+********************************************************************************
+* cloudflare (CloudflareProvider)
+*   Update
+*     <TxtRecord TXT 300, test.grumpydude.com., ['update 2 to test txt entry']> ->
+*     <TxtRecord TXT 300, test.grumpydude.com., ['update 3 to test txt entry']> (zones)
+*   Summary: Creates=0, Updates=1, Deletes=0, Existing Records=13
+********************************************************************************
+
+
+2023-07-22T19:17:52  [140704284960320] INFO  CloudflareProvider[cloudflare] apply: making 1 changes to grumpydude.com.
+2023-07-22T19:17:52  [140704284960320] INFO  Manager sync:   1 total changes
+$
 ```
 
-OctoDNS has built-in protection to make too many records are not added/deleted/updated in a single go. If you are sure the changes are valid, the checks can be bypassed with the `--force` option.
+Here you can see that `make doit` also runs `make validate` as a dependency as we can't be too careful. The update plan that was shown by `make sync` has been executed and change can be validated with `dig` like so
 
 ```shell
-$ make force
+$ dig -t txt test.grumpydude.com
+
+; <<>> DiG 9.10.6 <<>> -t txt test.grumpydude.com
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 6901
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 4096
+;; QUESTION SECTION:
+;test.grumpydude.com.		IN	TXT
+
+;; ANSWER SECTION:
+test.grumpydude.com.	300	IN	TXT	"update 3 to test txt entry"
+
+;; Query time: 29 msec
+;; SERVER: 10.13.13.1#53(10.13.13.1)
+;; WHEN: Sat Jul 22 19:22:27 CDT 2023
+;; MSG SIZE  rcvd: 106
+$
 ```
+
+OctoDNS has built-in protection to make too many records are not added/deleted/updated in a single go. If an error message is displayed and the changes are valid, the checks can be bypassed with `make force` option.
+
+
+### CI/CD
+
+stuff ... GitHub Actions
 
 
 ## Contributing
