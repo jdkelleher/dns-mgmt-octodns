@@ -32,13 +32,13 @@ callisto:
   type: CNAME
   value: dynamic-gwy-sv.grumpydude.com.
 
-cpanel:
-  octodns:
-    cloudflare:
-      proxied: false
-  ttl: 300
-  type: A
-  value: 192.254.189.20
+#cpanel:
+#  octodns:
+#    cloudflare:
+#      proxied: false
+#  ttl: 300
+#  type: A
+#  value: 192.254.189.20
 
 # This is a dynamically managed entry that is being excluded via
 # NameRejectlistFilter
@@ -100,11 +100,11 @@ trinity:
   type: CNAME
   value: dynamic-gwy-sv.grumpydude.com.
 
-www:
-  octodns:
-    cloudflare:
-      proxied: false
-  ttl: 300
-  type: A
-  value: 192.254.189.20
+#www:
+#  octodns:
+#    cloudflare:
+#      proxied: false
+#  ttl: 300
+#  type: A
+#  value: 192.254.189.20
 
