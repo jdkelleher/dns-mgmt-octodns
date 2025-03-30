@@ -51,41 +51,41 @@ callisto:
 #   type: A
 #   value: 70.251.188.184
 
-list-test:
-- octodns:
-    cloudflare:
-      proxied: false
-  ttl: 300
-  type: A
-  # value: 149.28.122.195
-  value: 10.10.10.10
-# - octodns:
-#     cloudflare:
-#       proxied: false
-#   ttl: 300
-#   type: AAAA
-#   value: 2001:19f0:5c01:14d9:5400:3ff:fe04:f2a1
-- ttl: 300
-  type: MX
-  value:
-    exchange: list-test.grumpydude.com.
-    preference: 0
-- ttl: 300
-  type: TXT
-  value: v=spf1 a mx ~all
+#list-test:
+#- octodns:
+#    cloudflare:
+#      proxied: false
+#  ttl: 300
+#  type: A
+#  # value: 149.28.122.195
+#  value: 10.10.10.10
+## - octodns:
+##     cloudflare:
+##       proxied: false
+##   ttl: 300
+##   type: AAAA
+##   value: 2001:19f0:5c01:14d9:5400:3ff:fe04:f2a1
+#- ttl: 300
+#  type: MX
+#  value:
+#    exchange: list-test.grumpydude.com.
+#    preference: 0
+#- ttl: 300
+#  type: TXT
+#  value: v=spf1 a mx ~all
 
-lists:
-- octodns:
-    cloudflare:
-      proxied: false
-  ttl: 300
-  type: A
-  value: 192.254.189.20
-- ttl: 300
-  type: MX
-  value:
-    exchange: lists.grumpydude.com.
-    preference: 0
+#lists:
+#- octodns:
+#    cloudflare:
+#      proxied: false
+#  ttl: 300
+#  type: A
+#  value: 192.254.189.20
+#- ttl: 300
+#  type: MX
+#  value:
+#    exchange: lists.grumpydude.com.
+#    preference: 0
 
 test:
 - ttl: 300
